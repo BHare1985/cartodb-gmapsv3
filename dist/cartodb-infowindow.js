@@ -1,54 +1,67 @@
+"use strict";
+
 /*
  * CartoDBInfowindow
  * v0.21
  */
-function CartoDBInfowindow(map) {
+function CartoDBInfowindow(map, opts) {
 	this.latlng_ = null;
 	this.offsetHorizontal_ = -107;
+	this.offsetX = 0;
+	this.offsetY = 0;
 	this.width_ = 214;
 	this.div_ = null;
 	this.map_ = map;
 	this.setMap(map);
+	this.baseOpts = {
+		styleName: "white",
+		onAdd: function() {
+			return;
+		},
+		onClose: function() {
+			return;
+		}
+	};
+	this.opts = $.extend(true, this.baseOpts, opts);
 }
 
 CartoDBInfowindow.prototype = new google.maps.OverlayView();
 
 
-CartoDBInfowindow.prototype.draw = function() {
+CartoDBInfowindow.prototype.onAdd = function() {
 	var me = this;
-
 	var div = this.div_;
 	if (!div) {
 		div = this.div_ = document.createElement('DIV');
-		div.className = "cartodb_infowindow";
-
-		div.innerHTML = '<a href="#close" class="close">x</a>' +
-			'<div class="outer_top">' +
-			'<div class="top">' +
-			'</div>' +
-			'</div>' +
-			'<div class="bottom"></div>';
-
+		div.className = "cartodb_infowindow " + this.opts.styleName;
+		div.innerHTML = '<a href="#close" class="close">x</a>' + '<div class="outer_top">' + '<div class="top">' + '</div>' + '</div>' + '<div class="bottom"></div>';
 		var a = this.getElementsByClassName("close", div)[0];
-
 		google.maps.event.addDomListener(a, 'click', function(ev) {
 			ev.preventDefault ? ev.preventDefault() : ev.returnValue = false;
 			me._hide();
+			me.opts.onClose(me);
 		});
-
 		google.maps.event.addDomListener(a, 'touchend', function(ev) {
 			ev.preventDefault ? ev.preventDefault() : ev.returnValue = false;
 			me._hide();
+			me.opts.onClose(me);
+		});
+
+		google.maps.event.addDomListener(div, 'mousewheel', function(ev) {
+			if (ev.deltaY < 0) {
+				me.map_.setZoom(me.map_.getZoom() + 1);
+			} else {
+				me.map_.setZoom(me.map_.getZoom() - 1);
+			}
+			ev.preventDefault ? ev.preventDefault() : ev.returnValue = false;
 		});
 
 		google.maps.event.addDomListener(div, 'touchstart', function(ev) {
 			ev.preventDefault ? ev.preventDefault() : ev.returnValue = false;
 		});
-
 		google.maps.event.addDomListener(div, 'touchend', function(ev) {
 			ev.preventDefault ? ev.preventDefault() : ev.returnValue = false;
 		});
-
 		google.maps.event.addDomListener(div, 'dblclick', function(ev) {
 			ev.preventDefault ? ev.preventDefault() : ev.returnValue = false;
 		});
@@ -68,23 +81,25 @@ CartoDBInfowindow.prototype.draw = function() {
 
 		var panes = this.getPanes();
 		panes.floatPane.appendChild(div);
-
 		div.style.opacity = 0;
 	}
 
-	this.setPosition();
+	google.maps.event.trigger(this, "added");
+	this.opts.onAdd(this);
 };
 
+
+CartoDBInfowindow.prototype.draw = function() {
+	this.updatePosition();
+};
 
 CartoDBInfowindow.prototype.setContent = function(content) {
 	if (this.div_) {
 		var div = this.div_,
 			top = this.getElementsByClassName("top", div)[0];
-
 		if (!content) {
 			return;
 		}
-
 		if (typeof content === 'string') {
 			top.innerHTML = content;
 		} else {
@@ -97,21 +112,39 @@ CartoDBInfowindow.prototype.setContent = function(content) {
 			top.innerHTML = html;
 		}
 	}
+
+	google.maps.event.trigger(this, 'setContent');
 };
 
-
-CartoDBInfowindow.prototype.setPosition = function(latlng) {
-	if (latlng) {
-		this.latlng_ = latlng;
-		// Adjust pan
-		this._adjustPan();
+CartoDBInfowindow.prototype.setContentFromUrl = function(url, callback) {
+	var self = this;
+	if (!this.div_) {
+		throw Error("No div");
 	}
 
-	if (this.div_) {
-		var div = this.div_,
-			pixPosition = this.getProjection()
-				.fromLatLngToDivPixel(this.latlng_);
+	if (!url) {
+		throw Error("No url provided to setContentFromUrl");
+	}
+
+	var div = this.div_,
+		top = this.getElementsByClassName("top", div)[0];
+
+	return $(top)
+		.load(url, function() {
+			google.maps.event.trigger(self, "setContent");
+			return callback(top);
+		});
+};
+
+CartoDBInfowindow.prototype.updatePosition = function() {
+	if (this.div_ && this.getProjection()) {
+		var div = this.div_;
+		var pixPosition = this.getProjection()
+			.fromLatLngToDivPixel(this.latlng_);
 		if (pixPosition) {
+			pixPosition.x += this.offsetX;
+			pixPosition.y += this.offsetY;
+
 			div.style.width = this.width_ + 'px';
 			div.style.left = (pixPosition.x - 49) + 'px';
 			var actual_height = -div.clientHeight;
@@ -121,16 +154,24 @@ CartoDBInfowindow.prototype.setPosition = function(latlng) {
 };
 
 
+CartoDBInfowindow.prototype.setPosition = function(latlng, offsetX, offsetY) {
+	this.offsetX = offsetX || 0;
+	this.offsetY = offsetY || 0;
+
+	if (latlng) {
+		this.latlng_ = latlng;
+		this._adjustPan();
+	}
+
+	this.updatePosition();
+};
+
 CartoDBInfowindow.prototype.open = function() {
 	this._show();
 };
-
-
 CartoDBInfowindow.prototype.close = function() {
 	this._hide();
 };
-
-
 CartoDBInfowindow.prototype.destroy = function() {
 	// Check if the overlay was on the map and needs to be removed.
 	if (this.div_) {
@@ -139,8 +180,6 @@ CartoDBInfowindow.prototype.destroy = function() {
 	}
 	this.setMap(null);
 };
-
-
 CartoDBInfowindow.prototype._hide = function() {
 	if (this.div_) {
 		var div = this.div_;
@@ -154,9 +193,8 @@ CartoDBInfowindow.prototype._hide = function() {
 				}
 			});
 	}
+	google.maps.event.trigger(this, 'hide');
 };
-
-
 CartoDBInfowindow.prototype._show = function() {
 	if (this.div_) {
 		var div = this.div_;
@@ -169,32 +207,32 @@ CartoDBInfowindow.prototype._show = function() {
 				duration: 250
 			});
 	}
+	google.maps.event.trigger(this, 'show');
 };
 
-
 CartoDBInfowindow.prototype._adjustPan = function() {
-	var left = 0,
-		top = 0,
-		pixPosition = this.getProjection()
-			.fromLatLngToContainerPixel(this.latlng_),
-		container = this.map_.getDiv(),
-		div_height = this.div_.clientHeight;
+	var left = 0;
+	var top = 0;
+	var pixPosition = this.getProjection()
+		.fromLatLngToContainerPixel(this.latlng_);
+	pixPosition.x += this.offsetX;
+	pixPosition.y += this.offsetY;
+
+	var container = this.map_.getDiv();
+	var div_height = this.div_.clientHeight;
+
 
 	if ((pixPosition.x - 65) < 0) {
 		left = (pixPosition.x - 65);
 	}
-
 	if ((pixPosition.x + 180) >= container.clientWidth) {
 		left = (pixPosition.x + 180 - container.clientWidth);
 	}
-
 	if ((pixPosition.y - div_height) < 0) {
 		top = (pixPosition.y - div_height - 20);
 	}
-
 	this.map_.panBy(left, top);
 };
-
 
 CartoDBInfowindow.prototype.getElementsByClassName = function(classname, node) {
 	if (!node) node = document.getElementsByTagName("body")[0];
@@ -205,8 +243,6 @@ CartoDBInfowindow.prototype.getElementsByClassName = function(classname, node) {
 		if (re.test(els[i].className)) a.push(els[i]);
 	return a;
 };
-
-
 /*!
  * emile.js (c) 2009 - 2011 Thomas Fuchs
  * Licensed under the terms of the MIT license.
