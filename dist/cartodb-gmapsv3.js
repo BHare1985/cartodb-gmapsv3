@@ -9,37 +9,37 @@
  *               maps v3.
  *
  */
-
 // Namespace
-var CartoDB = CartoDB || {};
+var CartoDB = CartoDB ||
+	{};
 
-if (typeof(google.maps.CartoDBLayer) === "undefined") {
+if (typeof (google.maps.CartoDBLayer) === "undefined") {
 
 	/**
-	  * Initialize CartoDB Layer
-	  * @params {Object}
-	  *    map               -     Your google map
-	  *    user_name         -     CartoDB user name
-	  *    table_name        -     CartoDB table name
-	  *    query             -     If you want to apply any sql sentence to the table...
-	  *    opacity           -     If you want to change the opacity of the CartoDB layer
-	  *    layer_order       -     If you want to change the position order of the CartoDB layer
-	  *    tile_style        -     If you want to add other style to the layer
-	  *    map_style         -     Show the same style as you defined in the CartoDB map
-	  *    interactivity     -     Get data from the feature clicked ( without any request :) )
-	  *    featureOver       -     Callback when user hovers a feature (return mouse event, latlng and data)
-	  *    featureOut        -     Callback when user hovers out a feature
-	  *    featureClick      -     Callback when user clicks a feature (return mouse event, latlng and data)
-	  *    debug             -     Get error messages from the library
-	  *    auto_bound        -     Let cartodb auto-bound-zoom in the map (opcional - default = false)
-	  *
-	  *    tiler_domain      -     Use your own tiler domain
-	  *    tiler_port        -     Use your current tiler port
-	  *    tiler_protocol    -     http or https?
-	  *    sql_domain        -     Use your own sql domain
-	  *    sql_port          -     Use your current sql port
-	  *    sql_protocol      -     http or https?
-	  */
+	 * Initialize CartoDB Layer
+	 * @params {Object}
+	 *    map               -     Your google map
+	 *    user_name         -     CartoDB user name
+	 *    table_name        -     CartoDB table name
+	 *    query             -     If you want to apply any sql sentence to the table...
+	 *    opacity           -     If you want to change the opacity of the CartoDB layer
+	 *    layer_order       -     If you want to change the position order of the CartoDB layer
+	 *    tile_style        -     If you want to add other style to the layer
+	 *    map_style         -     Show the same style as you defined in the CartoDB map
+	 *    interactivity     -     Get data from the feature clicked ( without any request :) )
+	 *    featureOver       -     Callback when user hovers a feature (return mouse event, latlng and data)
+	 *    featureOut        -     Callback when user hovers out a feature
+	 *    featureClick      -     Callback when user clicks a feature (return mouse event, latlng and data)
+	 *    debug             -     Get error messages from the library
+	 *    auto_bound        -     Let cartodb auto-bound-zoom in the map (opcional - default = false)
+	 *
+	 *    tiler_domain      -     Use your own tiler domain
+	 *    tiler_port        -     Use your current tiler port
+	 *    tiler_protocol    -     http or https?
+	 *    sql_domain        -     Use your own sql domain
+	 *    sql_port          -     Use your current sql port
+	 *    sql_protocol      -     http or https?
+	 */
 
 
 	function CartoDBLayer(options) {
@@ -64,18 +64,20 @@ if (typeof(google.maps.CartoDBLayer) === "undefined") {
 			sql_port: "80",
 			sql_protocol: "http"
 		};
-		this.options = this._extend({}, this.options, options);
+		this.options = this._extend(
+			{}, this.options, options);
 
 		// Hack to prevent setOptions OverlayView default function
 		this.setOptions = function(options) {
-			google.maps.OverlayView.prototype.setOptions.call(this, {});
+			google.maps.OverlayView.prototype.setOptions.call(this,
+				{});
 			this._setOptions(options);
 		};
 
 		// Some checks
 		if (!this.options.table_name || !this.options.map) {
 			if (this.options.debug) {
-				throw('cartodb-gmapsv3 needs at least a CartoDB table name and the gmapsv3 map object :(');
+				throw ('cartodb-gmapsv3 needs at least a CartoDB table name and the gmapsv3 map object :(');
 			} else {
 				return;
 			}
@@ -87,11 +89,12 @@ if (typeof(google.maps.CartoDBLayer) === "undefined") {
 
 	CartoDBLayer.prototype.extend = function(obj1, obj2) {
 		return (function(object) {
-			for (var property in object.prototype) {
-				this.prototype[property] = object.prototype[property];
-			}
-			return this;
-		}).apply(obj1, [obj2]);
+				for (var property in object.prototype) {
+					this.prototype[property] = object.prototype[property];
+				}
+				return this;
+			})
+			.apply(obj1, [obj2]);
 	};
 
 
@@ -126,8 +129,8 @@ if (typeof(google.maps.CartoDBLayer) === "undefined") {
 
 
 	/**
-     * When removes the layer, destroy interactivity if exist
-     */
+	 * When removes the layer, destroy interactivity if exist
+	 */
 	CartoDBLayer.prototype.onRemove = function(map) {
 		this._remove();
 
@@ -142,14 +145,14 @@ if (typeof(google.maps.CartoDBLayer) === "undefined") {
 
 
 	/**
-     * Change opacity of the layer
-     * @params {Integer} New opacity
-     */
+	 * Change opacity of the layer
+	 * @params {Integer} New opacity
+	 */
 	CartoDBLayer.prototype.setOpacity = function(opacity) {
 
 		if (!this.options.added) {
 			if (this.options.debug) {
-				throw('the layer is not still added to the map');
+				throw ('the layer is not still added to the map');
 			} else {
 				return;
 			}
@@ -157,7 +160,7 @@ if (typeof(google.maps.CartoDBLayer) === "undefined") {
 
 		if (isNaN(opacity) || opacity > 1 || opacity < 0) {
 			if (this.options.debug) {
-				throw(opacity + ' is not a valid value');
+				throw (opacity + ' is not a valid value');
 			} else {
 				return;
 			}
@@ -170,15 +173,15 @@ if (typeof(google.maps.CartoDBLayer) === "undefined") {
 
 
 	/**
-     * Change query of the tiles
-     * @params {str} New sql for the tiles
-     * @params {Boolean}  Choose if the map fits to the sql results bounds (thanks to @fgblanch)
-     */
+	 * Change query of the tiles
+	 * @params {str} New sql for the tiles
+	 * @params {Boolean}  Choose if the map fits to the sql results bounds (thanks to @fgblanch)
+	 */
 	CartoDBLayer.prototype.setQuery = function(sql, fitToBounds) {
 
 		if (!this.options.added) {
 			if (this.options.debug) {
-				throw('the layer is not still added to the map');
+				throw ('the layer is not still added to the map');
 			} else {
 				return;
 			}
@@ -186,7 +189,7 @@ if (typeof(google.maps.CartoDBLayer) === "undefined") {
 
 		if (!isNaN(sql)) {
 			if (this.options.debug) {
-				throw(sql + ' is not a valid query');
+				throw (sql + ' is not a valid query');
 			} else {
 				return;
 			}
@@ -202,14 +205,14 @@ if (typeof(google.maps.CartoDBLayer) === "undefined") {
 
 
 	/**
-     * Change style of the tiles
-     * @params {style} New carto for the tiles
-     */
+	 * Change style of the tiles
+	 * @params {style} New carto for the tiles
+	 */
 	CartoDBLayer.prototype.setStyle = function(style) {
 
 		if (!this.options.added) {
 			if (this.options.debug) {
-				throw('the layer is not still added to the map');
+				throw ('the layer is not still added to the map');
 			} else {
 				return;
 			}
@@ -217,7 +220,7 @@ if (typeof(google.maps.CartoDBLayer) === "undefined") {
 
 		if (!isNaN(style)) {
 			if (this.options.debug) {
-				throw(style + ' is not a valid style');
+				throw (style + ' is not a valid style');
 			} else {
 				return;
 			}
@@ -230,14 +233,14 @@ if (typeof(google.maps.CartoDBLayer) === "undefined") {
 
 
 	/**
-     * Change the query when clicks in a feature
-     * @params { Boolean || String } New sql for the request
-     */
+	 * Change the query when clicks in a feature
+	 * @params { Boolean || String } New sql for the request
+	 */
 	CartoDBLayer.prototype.setInteractivity = function(value) {
 
 		if (!this.options.added) {
 			if (this.options.debug) {
-				throw('the layer is not still added to the map');
+				throw ('the layer is not still added to the map');
 			} else {
 				return;
 			}
@@ -245,7 +248,7 @@ if (typeof(google.maps.CartoDBLayer) === "undefined") {
 
 		if (!isNaN(value)) {
 			if (this.options.debug) {
-				throw(value + ' is not a valid setInteractivity value');
+				throw (value + ' is not a valid setInteractivity value');
 			} else {
 				return;
 			}
@@ -259,14 +262,14 @@ if (typeof(google.maps.CartoDBLayer) === "undefined") {
 
 
 	/**
-     * Change layer index
-     * @params { Integer || String } New position for the layer
-     */
+	 * Change layer index
+	 * @params { Integer || String } New position for the layer
+	 */
 	CartoDBLayer.prototype.setLayerOrder = function(position) {
 
 		if (!this.options.added) {
 			if (this.options.debug) {
-				throw('the layer is not still added to the map');
+				throw ('the layer is not still added to the map');
 			} else {
 				return;
 			}
@@ -274,7 +277,7 @@ if (typeof(google.maps.CartoDBLayer) === "undefined") {
 
 		if (isNaN(position) && position != "top" && position != "bottom") {
 			if (this.options.debug) {
-				throw(position + ' is not a valid layer position');
+				throw (position + ' is not a valid layer position');
 			} else {
 				return;
 			}
@@ -291,14 +294,14 @@ if (typeof(google.maps.CartoDBLayer) === "undefined") {
 
 
 	/**
-     * Active or desactive interaction
-     * @params {Boolean} Choose if wants interaction or not
-     */
+	 * Active or desactive interaction
+	 * @params {Boolean} Choose if wants interaction or not
+	 */
 	CartoDBLayer.prototype.setInteraction = function(bool) {
 
 		if (!this.options.added) {
 			if (this.options.debug) {
-				throw('the layer is not still added to the map');
+				throw ('the layer is not still added to the map');
 			} else {
 				return;
 			}
@@ -306,7 +309,7 @@ if (typeof(google.maps.CartoDBLayer) === "undefined") {
 
 		if (bool !== false && bool !== true) {
 			if (this.options.debug) {
-				throw(bool + ' is not a valid setInteraction value');
+				throw (bool + ' is not a valid setInteraction value');
 			} else {
 				return;
 			}
@@ -315,8 +318,12 @@ if (typeof(google.maps.CartoDBLayer) === "undefined") {
 		if (this.interaction) {
 			if (bool) {
 				var self = this;
-				this.interaction.on('on', function(o) { self._bindWaxOnEvents(self.options.map, o) });
-				this.interaction.on('off', function(o) { self._bindWaxOffEvents() });
+				this.interaction.on('on', function(o) {
+					self._bindWaxOnEvents(self.options.map, o);
+				});
+				this.interaction.on('off', function(o) {
+					self._bindWaxOffEvents();
+				});
 			} else {
 				this.interaction.off('on');
 				this.interaction.off('off');
@@ -326,13 +333,13 @@ if (typeof(google.maps.CartoDBLayer) === "undefined") {
 
 
 	/**
-     * Change multiple options at the same time
-     * @params {Object} New options object
-     */
+	 * Change multiple options at the same time
+	 * @params {Object} New options object
+	 */
 	CartoDBLayer.prototype._setOptions = function(options) {
 		if (!this.options.added) {
 			if (this.options.debug) {
-				throw('the layer is not still added to the map');
+				throw ('the layer is not still added to the map');
 			} else {
 				return;
 			}
@@ -340,27 +347,28 @@ if (typeof(google.maps.CartoDBLayer) === "undefined") {
 
 		if (typeof options != "object" || options.length) {
 			if (this.options.debug) {
-				throw(options + ' options has to be an object');
+				throw (options + ' options has to be an object');
 			} else {
 				return;
 			}
 		}
 
 		// Set options
-		this.options = this._extend({}, this.options, options);
+		this.options = this._extend(
+			{}, this.options, options);
 
 		this._update();
 	};
 
 
 	/**
-     * Hide the CartoDB layer
-     */
+	 * Hide the CartoDB layer
+	 */
 	CartoDBLayer.prototype.hide = function() {
 
 		if (!this.options.added) {
 			if (this.options.debug) {
-				throw('the layer is not still added to the map');
+				throw ('the layer is not still added to the map');
 			} else {
 				return;
 			}
@@ -368,7 +376,7 @@ if (typeof(google.maps.CartoDBLayer) === "undefined") {
 
 		if (!this.options.visible) {
 			if (this.options.debug) {
-				throw('the layer is already hidden');
+				throw ('the layer is already hidden');
 			} else {
 				return;
 			}
@@ -386,13 +394,13 @@ if (typeof(google.maps.CartoDBLayer) === "undefined") {
 
 
 	/**
-     * Show the CartoDB layer
-     */
+	 * Show the CartoDB layer
+	 */
 	CartoDBLayer.prototype.show = function() {
 
 		if (!this.options.added) {
 			if (this.options.debug) {
-				throw('the layer is not still added to the map');
+				throw ('the layer is not still added to the map');
 			} else {
 				return;
 			}
@@ -400,7 +408,7 @@ if (typeof(google.maps.CartoDBLayer) === "undefined") {
 
 		if (this.options.visible) {
 			if (this.options.debug) {
-				throw('the layer is already shown');
+				throw ('the layer is already shown');
 			} else {
 				return;
 			}
@@ -417,24 +425,24 @@ if (typeof(google.maps.CartoDBLayer) === "undefined") {
 
 
 	/**
-     * Return the visibility of the layer
-     */
+	 * Return the visibility of the layer
+	 */
 	CartoDBLayer.prototype.isVisible = function() {
 		return this.options.visible;
 	};
 
 
 	/**
-     * Returns if the layer belongs to the map or not
-     */
+	 * Returns if the layer belongs to the map or not
+	 */
 	CartoDBLayer.prototype.isAdded = function() {
 		return this.options.added;
 	};
 
 
 	/*
-     * PRIVATE METHODS
-     */
+	 * PRIVATE METHODS
+	 */
 
 	/**
 	 * Remove CartoDB layer
@@ -462,8 +470,8 @@ if (typeof(google.maps.CartoDBLayer) === "undefined") {
 
 
 	/**
-     * Update CartoDB layer
-     */
+	 * Update CartoDB layer
+	 */
 	CartoDBLayer.prototype._update = function() {
 		// First remove old layer
 		this._remove();
@@ -476,9 +484,9 @@ if (typeof(google.maps.CartoDBLayer) === "undefined") {
 
 
 	/**
-     * Zoom to cartodb geometries
-     * @param {String} If it specifies a sql, it bounds over it, if not, using the default one
-     */
+	 * Zoom to cartodb geometries
+	 * @param {String} If it specifies a sql, it bounds over it, if not, using the default one
+	 */
 	CartoDBLayer.prototype.setBounds = function(sql) {
 		var self = this;
 
@@ -486,51 +494,52 @@ if (typeof(google.maps.CartoDBLayer) === "undefined") {
 			var sql = this.options.query;
 		}
 
-		reqwest({
-			url: this._generateCoreUrl("sql") + '/api/v2/sql/?q=' + escape('SELECT ST_XMin(ST_Extent(the_geom)) as minx,ST_YMin(ST_Extent(the_geom)) as miny,' +
-				'ST_XMax(ST_Extent(the_geom)) as maxx,ST_YMax(ST_Extent(the_geom)) as maxy from (' + sql.replace(/\{\{table_name\}\}/g, this.options.table_name) + ') as subq'),
-			type: 'jsonp',
-			jsonpCallback: 'callback',
-			success: function(result) {
-				if (result.rows[0].maxx != null) {
-					var coordinates = result.rows[0];
+		reqwest(
+			{
+				url: this._generateCoreUrl("sql") + '/api/v2/sql/?q=' + escape('SELECT ST_XMin(ST_Extent(the_geom)) as minx,ST_YMin(ST_Extent(the_geom)) as miny,' +
+					'ST_XMax(ST_Extent(the_geom)) as maxx,ST_YMax(ST_Extent(the_geom)) as maxy from (' + sql.replace(/\{\{table_name\}\}/g, this.options.table_name) + ') as subq'),
+				type: 'jsonp',
+				jsonpCallback: 'callback',
+				success: function(result) {
+					if (result.rows[0].maxx != null) {
+						var coordinates = result.rows[0];
 
-					var lon0 = coordinates.maxx;
-					var lat0 = coordinates.maxy;
-					var lon1 = coordinates.minx;
-					var lat1 = coordinates.miny;
+						var lon0 = coordinates.maxx;
+						var lat0 = coordinates.maxy;
+						var lon1 = coordinates.minx;
+						var lat1 = coordinates.miny;
 
-					var minlat = -85.0511;
-					var maxlat = 85.0511;
-					var minlon = -179;
-					var maxlon = 179;
+						var minlat = -85.0511;
+						var maxlat = 85.0511;
+						var minlon = -179;
+						var maxlon = 179;
 
-					/* Clamp X to be between min and max (inclusive) */
-					var clampNum = function(x, min, max) {
-						return x < min ? min : x > max ? max : x;
-					};
+						/* Clamp X to be between min and max (inclusive) */
+						var clampNum = function(x, min, max) {
+							return x < min ? min : x > max ? max : x;
+						};
 
-					lon0 = clampNum(lon0, minlon, maxlon);
-					lon1 = clampNum(lon1, minlon, maxlon);
-					lat0 = clampNum(lat0, minlat, maxlat);
-					lat1 = clampNum(lat1, minlat, maxlat);
+						lon0 = clampNum(lon0, minlon, maxlon);
+						lon1 = clampNum(lon1, minlon, maxlon);
+						lat0 = clampNum(lat0, minlat, maxlat);
+						lat1 = clampNum(lat1, minlat, maxlat);
 
-					var ne = new google.maps.LatLng(lat0, lon0);
-					var sw = new google.maps.LatLng(lat1, lon1);
-					var bounds = new google.maps.LatLngBounds(sw, ne);
-					self.options.map.fitBounds(bounds);
+						var ne = new google.maps.LatLng(lat0, lon0);
+						var sw = new google.maps.LatLng(lat1, lon1);
+						var bounds = new google.maps.LatLngBounds(sw, ne);
+						self.options.map.fitBounds(bounds);
+					}
+				},
+				error: function(e, msg) {
+					if (this.options.debug) throw ('Error getting table bounds: ' + msg);
 				}
-			},
-			error: function(e, msg) {
-				if (this.options.debug) throw('Error getting table bounds: ' + msg);
-			}
-		});
+			});
 	};
 
 
 	/**
-     * Add Wadus
-     */
+	 * Add Wadus
+	 */
 	CartoDBLayer.prototype._addWadus = function() {
 		var self = this;
 		setTimeout(function() {
@@ -541,58 +550,176 @@ if (typeof(google.maps.CartoDBLayer) === "undefined") {
 				cartodb_link.setAttribute('href', 'http://www.cartodb.com');
 				cartodb_link.setAttribute('target', '_blank');
 				cartodb_link.innerHTML = "<img src='http://cartodb.s3.amazonaws.com/static/new_logo.png' alt='CartoDB' title='CartoDB' style='border:none;' />";
-				self.options.map.getDiv().appendChild(cartodb_link);
+				self.options.map.getDiv()
+					.appendChild(cartodb_link);
 			}
 		}, 2000);
 	};
 
 
 	/**
-     * Set the map styles of your CartoDB table/map
-     */
+	 * Set the map styles of your CartoDB table/map
+	 */
 	CartoDBLayer.prototype._setMapStyle = function() {
 		var self = this;
-		reqwest({
-			url: this._generateCoreUrl("tiler") + '/tiles/' + this.options.table_name + '/map_metadata?callback=?',
-			type: 'jsonp',
-			jsonpCallback: 'callback',
-			success: function(result) {
-				var map_style = json_parse(result.map_metadata);
+		reqwest(
+			{
+				url: this._generateCoreUrl("tiler") + '/tiles/' + this.options.table_name + '/map_metadata?callback=?',
+				type: 'jsonp',
+				jsonpCallback: 'callback',
+				success: function(result) {
+					var map_style = json_parse(result.map_metadata);
 
-				if (!map_style || map_style.google_maps_base_type == "roadmap") {
-					self.map.setOptions({ mapTypeId: google.maps.MapTypeId.ROADMAP });
-				} else if (map_style.google_maps_base_type == "satellite") {
-					self.map.setOptions({ mapTypeId: google.maps.MapTypeId.SATELLITE });
-				} else if (map_style.google_maps_base_type == "terrain") {
-					self.map.setOptions({ mapTypeId: google.maps.MapTypeId.TERRAIN });
-				} else {
-					var mapStyles = [
-						{ stylers: [{ saturation: -65 }, { gamma: 1.52 }] }, { featureType: "administrative", stylers: [{ saturation: -95 }, { gamma: 2.26 }] }, { featureType: "water", elementType: "labels", stylers: [{ visibility: "off" }] },
-						{ featureType: "administrative.locality", stylers: [{ visibility: "off" }] }, { featureType: "road", stylers: [{ visibility: "simplified" }, { saturation: -99 }, { gamma: 2.22 }] },
-						{ featureType: "poi", elementType: "labels", stylers: [{ visibility: "off" }] }, { featureType: "road.arterial", stylers: [{ visibility: "off" }] }, { featureType: "road.local", elementType: "labels", stylers: [{ visibility: "off" }] },
-						{ featureType: "transit", stylers: [{ visibility: "off" }] }, { featureType: "road", elementType: "labels", stylers: [{ visibility: "off" }] }, { featureType: "poi", stylers: [{ saturation: -55 }] }
-					];
-					map_style.google_maps_customization_style = mapStyles;
-					self.map.setOptions({ mapTypeId: google.maps.MapTypeId.ROADMAP });
+					if (!map_style || map_style.google_maps_base_type == "roadmap") {
+						self.map.setOptions(
+							{
+								mapTypeId: google.maps.MapTypeId.ROADMAP
+							});
+					} else if (map_style.google_maps_base_type == "satellite") {
+						self.map.setOptions(
+							{
+								mapTypeId: google.maps.MapTypeId.SATELLITE
+							});
+					} else if (map_style.google_maps_base_type == "terrain") {
+						self.map.setOptions(
+							{
+								mapTypeId: google.maps.MapTypeId.TERRAIN
+							});
+					} else {
+						var mapStyles = [
+							{
+								stylers: [
+									{
+										saturation: -65
+									},
+									{
+										gamma: 1.52
+									}
+								]
+							},
+							{
+								featureType: "administrative",
+								stylers: [
+									{
+										saturation: -95
+									},
+									{
+										gamma: 2.26
+									}
+								]
+							},
+							{
+								featureType: "water",
+								elementType: "labels",
+								stylers: [
+									{
+										visibility: "off"
+									}
+								]
+							},
+							{
+								featureType: "administrative.locality",
+								stylers: [
+									{
+										visibility: "off"
+									}
+								]
+							},
+							{
+								featureType: "road",
+								stylers: [
+									{
+										visibility: "simplified"
+									},
+									{
+										saturation: -99
+									},
+									{
+										gamma: 2.22
+									}
+								]
+							},
+							{
+								featureType: "poi",
+								elementType: "labels",
+								stylers: [
+									{
+										visibility: "off"
+									}
+								]
+							},
+							{
+								featureType: "road.arterial",
+								stylers: [
+									{
+										visibility: "off"
+									}
+								]
+							},
+							{
+								featureType: "road.local",
+								elementType: "labels",
+								stylers: [
+									{
+										visibility: "off"
+									}
+								]
+							},
+							{
+								featureType: "transit",
+								stylers: [
+									{
+										visibility: "off"
+									}
+								]
+							},
+							{
+								featureType: "road",
+								elementType: "labels",
+								stylers: [
+									{
+										visibility: "off"
+									}
+								]
+							},
+							{
+								featureType: "poi",
+								stylers: [
+									{
+										saturation: -55
+									}
+								]
+							}
+						];
+						map_style.google_maps_customization_style = mapStyles;
+						self.map.setOptions(
+							{
+								mapTypeId: google.maps.MapTypeId.ROADMAP
+							});
+					}
+
+					// Custom tiles
+					if (!map_style) {
+						map_style = {
+							google_maps_customization_style: []
+						};
+					}
+
+					self.map.setOptions(
+						{
+							styles: map_style.google_maps_customization_style
+						});
+				},
+				error: function(e, msg) {
+					if (params.debug) throw ('Error getting map style: ' + msg);
 				}
-
-				// Custom tiles
-				if (!map_style) {
-					map_style = { google_maps_customization_style: [] };
-				}
-
-				self.map.setOptions({ styles: map_style.google_maps_customization_style });
-			},
-			error: function(e, msg) {
-				if (params.debug) throw('Error getting map style: ' + msg);
-			}
-		});
+			});
 	};
 
 
 	/**
-     * Add interaction cartodb tiles to the map
-     */
+	 * Add interaction cartodb tiles to the map
+	 */
 	CartoDBLayer.prototype._addInteraction = function() {
 
 		var self = this;
@@ -619,40 +746,46 @@ if (typeof(google.maps.CartoDBLayer) === "undefined") {
 			this.interaction = wax.g.interaction()
 				.map(this.options.map)
 				.tilejson(this.tilejson)
-				.on('on', function(o) { self._bindWaxOnEvents(self.options.map, o) })
-				.on('off', function(o) { self._bindWaxOffEvents() });
+				.on('on', function(o) {
+					self._bindWaxOnEvents(self.options.map, o);
+				})
+				.on('off', function(o) {
+					self._bindWaxOffEvents();
+				});
 		}
 	};
 
 
 	/**
-     * Bind on events for wax interaction
-     * @param {Object} Layer map object
-     * @param {Event} Wax event
-     */
+	 * Bind on events for wax interaction
+	 * @param {Object} Layer map object
+	 * @param {Event} Wax event
+	 */
 	CartoDBLayer.prototype._bindWaxOnEvents = function(map, o) {
-		var point = this._findPos(map, o), latlng = this.getProjection().fromContainerPixelToLatLng(point);
+		var point = this._findPos(map, o),
+			latlng = this.getProjection()
+				.fromContainerPixelToLatLng(point);
 
 		switch (o.e.type) {
 		case 'mousemove':
 			if (this.options.featureOver) {
 				return this.options.featureOver(o.e, latlng, point, o.data);
 			} else {
-				if (this.options.debug) throw('featureOver function not defined');
+				if (this.options.debug) throw ('featureOver function not defined');
 			}
 			break;
 		case 'click':
 			if (this.options.featureClick) {
 				this.options.featureClick(o.e, latlng, point, o.data);
 			} else {
-				if (this.options.debug) throw('featureClick function not defined');
+				if (this.options.debug) throw ('featureClick function not defined');
 			}
 			break;
 		case 'touchend':
 			if (this.options.featureClick) {
 				this.options.featureClick(o.e, latlng, point, o.data);
 			} else {
-				if (this.options.debug) throw('featureClick function not defined');
+				if (this.options.debug) throw ('featureClick function not defined');
 			}
 			break;
 		default:
@@ -662,21 +795,21 @@ if (typeof(google.maps.CartoDBLayer) === "undefined") {
 
 
 	/**
-     * Bind off event for wax interaction
-     */
+	 * Bind off event for wax interaction
+	 */
 	CartoDBLayer.prototype._bindWaxOffEvents = function() {
 		if (this.options.featureOut) {
 			return this.options.featureOut && this.options.featureOut();
 		} else {
-			if (this.options.debug) throw('featureOut function not defined');
+			if (this.options.debug) throw ('featureOut function not defined');
 		}
 	};
 
 
 	/**
-     * Generate tilejson for wax
-     * @return {Object} Options for ImageMapType
-     */
+	 * Generate tilejson for wax
+	 * @return {Object} Options for ImageMapType
+	 */
 	CartoDBLayer.prototype._generateTileJson = function() {
 		var urls = this._generateTileUrls();
 
@@ -699,8 +832,8 @@ if (typeof(google.maps.CartoDBLayer) === "undefined") {
 
 
 	/**
-     * Set the layer order
-     */
+	 * Set the layer order
+	 */
 	CartoDBLayer.prototype._setLayerOrder = function() {
 
 		// Remove this layer from the order array if it is present
@@ -748,8 +881,8 @@ if (typeof(google.maps.CartoDBLayer) === "undefined") {
 
 
 	/*
-     * HELPER FUNCTIONS
-     */
+	 * HELPER FUNCTIONS
+	 */
 
 	/**
 	 * Generate a URL about sql api or tile api
@@ -770,15 +903,20 @@ if (typeof(google.maps.CartoDBLayer) === "undefined") {
 	};
 
 	/**
-     * Generate the final tile and grid URLs for the tiler
-     */
+	 * Generate the final tile and grid URLs for the tiler
+	 */
 	CartoDBLayer.prototype._generateTileUrls = function() {
-			var core_url = this._generateCoreUrl("tiler"), base_url = core_url + '/tiles/' + this.options.table_name + '/{z}/{x}/{y}', tile_url = base_url + '.png', grid_url = base_url + '.grid.json';
+			var core_url = this._generateCoreUrl("tiler"),
+				base_url = core_url + '/tiles/' + this.options.table_name + '/{z}/{x}/{y}',
+				tile_url = base_url + '.png',
+				grid_url = base_url + '.grid.json';
 
 			// SQL?
 			if (this.options.query) {
 				var q = encodeURIComponent(this.options.query.replace(/\{\{table_name\}\}/g, this.options.table_name));
-				q = q.replace(/%7Bx%7D/g, "{x}").replace(/%7By%7D/g, "{y}").replace(/%7Bz%7D/g, "{z}");
+				q = q.replace(/%7Bx%7D/g, "{x}")
+					.replace(/%7By%7D/g, "{y}")
+					.replace(/%7Bz%7D/g, "{z}");
 				var query = 'sql=' + q;
 				tile_url = this._addUrlData(tile_url, query);
 				grid_url = this._addUrlData(grid_url, query);
@@ -822,11 +960,13 @@ if (typeof(google.maps.CartoDBLayer) === "undefined") {
 			var o = {
 				    strictMode: false,
 				    key: ["source", "protocol", "authority", "userInfo", "user", "password", "host", "port", "relative", "path", "directory", "file", "query", "anchor"],
-				    q: {
+				    q:
+				    {
 					    name: "queryKey",
 					    parser: /(?:^|&)([^&=]*)=?([^&]*)/g
 				    },
-				    parser: {
+				    parser:
+				    {
 					    strict: /^(?:([^:\/?#]+):)?(?:\/\/((?:(([^:@]*)(?::([^:@]*))?)?@)?([^:\/?#]*)(?::(\d*))?))?((((?:[^?#\/]*\/)*)([^?#]*))(?:\?([^#]*))?(?:#(.*))?)/,
 					    loose: /^(?:(?![^:@]+:[^:@\/]*@)([^:\/?#.]+):)?(?:\/\/)?((?:(([^:@]*)(?::([^:@]*))?)?@)?([^:\/?#]*)(?::(\d*))?)(((\/(?:[^?#](?![^?#\/]*\.[^?#\/.]+(?:[?#]|$)))*\/?)?([^?#\/]*))(?:\?([^#]*))?(?:#(.*))?)/
 				    }
@@ -846,25 +986,29 @@ if (typeof(google.maps.CartoDBLayer) === "undefined") {
 
 
 	/**
-     * Appends callback onto urls regardless of existing query params
-     * @params {String} Tile url
-     * @params {String} Tile data
-     * @return {String} Tile url parsed
-     */
+	 * Appends callback onto urls regardless of existing query params
+	 * @params {String} Tile url
+	 * @params {String} Tile data
+	 * @return {String} Tile url parsed
+	 */
 	CartoDBLayer.prototype._addUrlData = function(url, data) {
-		url += (this._parseUri(url).query) ? '&' : '?';
+		url += (this._parseUri(url)
+				.query)
+			? '&'
+			: '?';
 		return url += data;
 	};
 
 
 	/**
-     * Merge src properties into dest
-     * @params {obj} Dest
-     */
+	 * Merge src properties into dest
+	 * @params {obj} Dest
+	 */
 	CartoDBLayer.prototype._extend = function(/*Object*/ dest) /*-> Object*/ {
 		var sources = Array.prototype.slice.call(arguments, 1);
 		for (var j = 0, len = sources.length, src; j < len; j++) {
-			src = sources[j] || {};
+			src = sources[j] ||
+				{};
 			for (var i in src) {
 				if (src.hasOwnProperty(i)) {
 					dest[i] = src[i];
@@ -876,10 +1020,10 @@ if (typeof(google.maps.CartoDBLayer) === "undefined") {
 
 
 	/**
-     * Calculate the correct offset to get the latlng clicked or touched
-     * @params {obj} Map dom element
-     * @params {obj} Wax event object
-     */
+	 * Calculate the correct offset to get the latlng clicked or touched
+	 * @params {obj} Map dom element
+	 * @params {obj} Wax event object
+	 */
 	CartoDBLayer.prototype._findPos = function(map, o) {
 		var curleft = curtop = 0;
 		var obj = map.getDiv();
@@ -893,35 +1037,47 @@ if (typeof(google.maps.CartoDBLayer) === "undefined") {
 
 
 	/**
-     * Check if the tile is ok or fails
-     */
+	 * Check if the tile is ok or fails
+	 */
 	CartoDBLayer.prototype._checkTiles = function() {
-		var xyz = { z: 4, x: 6, y: 6 }, self = this, img = new Image(), urls = this._generateTileUrls();
+		var xyz = {
+			    z: 4,
+			    x: 6,
+			    y: 6
+		    },
+			self = this,
+			img = new Image(),
+			urls = this._generateTileUrls();
 
 		// Choose a x-y-z for the check tile - grid
-		urls.tile_url = urls.tile_url.replace(/\{z\}/g, xyz.z).replace(/\{x\}/g, xyz.x).replace(/\{y\}/g, xyz.y);
-		urls.grid_url = urls.grid_url.replace(/\{z\}/g, xyz.z).replace(/\{x\}/g, xyz.x).replace(/\{y\}/g, xyz.y);
+		urls.tile_url = urls.tile_url.replace(/\{z\}/g, xyz.z)
+			.replace(/\{x\}/g, xyz.x)
+			.replace(/\{y\}/g, xyz.y);
+		urls.grid_url = urls.grid_url.replace(/\{z\}/g, xyz.z)
+			.replace(/\{x\}/g, xyz.x)
+			.replace(/\{y\}/g, xyz.y);
 
 
-		reqwest({
-			method: "get",
-			url: urls.grid_url,
-			type: 'jsonp',
-			jsonpCallback: 'callback',
-			jsonpCallbackName: 'grid',
-			success: function() {
-				clearTimeout(timeout);
-			},
-			error: function(error, msg) {
-				if (self.interaction)
-					self.interaction.remove();
+		reqwest(
+			{
+				method: "get",
+				url: urls.grid_url,
+				type: 'jsonp',
+				jsonpCallback: 'callback',
+				jsonpCallbackName: 'grid',
+				success: function() {
+					clearTimeout(timeout);
+				},
+				error: function(error, msg) {
+					if (self.interaction)
+						self.interaction.remove();
 
-				if (self.options.debug)
-					throw('There is an error in your query or your interaction parameter');
+					if (self.options.debug)
+						throw ('There is an error in your query or your interaction parameter');
 
-				google.maps.event.trigger(this, 'layererror', msg);
-			}
-		});
+					google.maps.event.trigger(this, 'layererror', msg);
+				}
+			});
 
 		// Hacky for reqwest, due to timeout doesn't work very well
 		var timeout = setTimeout(function() {
@@ -931,7 +1087,7 @@ if (typeof(google.maps.CartoDBLayer) === "undefined") {
 				self.interaction.remove();
 
 			if (self.options.debug)
-				throw('There is an error in your query or your interaction parameter');
+				throw ('There is an error in your query or your interaction parameter');
 
 			google.maps.event.trigger(this, 'layererror', "There is a problem in your SQL or interaction parameter");
 		}, 2000);
@@ -944,9 +1100,25 @@ if (typeof(google.maps.CartoDBLayer) === "undefined") {
 var json_parse = (function() {
 	var at,
 		ch,
-		escapee = { '"': '"', "\\": "\\", "/": "/", b: "\b", f: "\f", n: "\n", r: "\r", t: "\t" },
+		escapee = {
+			'"': '"',
+			"\\": "\\",
+			"/": "/",
+			b: "\b",
+			f: "\f",
+			n: "\n",
+			r: "\r",
+			t: "\t"
+		},
 		text,
-		error = function(m) { throw { name: "SyntaxError", message: m, at: at, text: text } },
+		error = function(m) {
+			throw {
+				name: "SyntaxError",
+				message: m,
+				at: at,
+				text: text
+			};
+		},
 		next = function(c) {
 			if (c && c !== ch) {
 				error("Expected '" + c + "' instead of '" + ch + "'");
@@ -991,7 +1163,10 @@ var json_parse = (function() {
 			}
 		},
 		string = function() {
-			var hex, i, string = "", uffff;
+			var hex,
+				i,
+				string = "",
+				uffff;
 			if (ch === '"') {
 				while (next()) {
 					if (ch === '"') {
@@ -1032,20 +1207,20 @@ var json_parse = (function() {
 		},
 		word = function() {
 			switch (ch) {
-			case"t":
+			case "t":
 				next("t");
 				next("r");
 				next("u");
 				next("e");
 				return true;
-			case"f":
+			case "f":
 				next("f");
 				next("a");
 				next("l");
 				next("s");
 				next("e");
 				return false;
-			case"n":
+			case "n":
 				next("n");
 				next("u");
 				next("l");
@@ -1108,13 +1283,13 @@ var json_parse = (function() {
 	value = function() {
 		white();
 		switch (ch) {
-		case"{":
+		case "{":
 			return object();
-		case"[":
+		case "[":
 			return array();
-		case'"':
+		case '"':
 			return string();
-		case"-":
+		case "-":
 			return number();
 		default:
 			return ch >= "0" && ch <= "9" ? number() : word();
@@ -1146,48 +1321,75 @@ var json_parse = (function() {
 					}
 				}
 				return reviver.call(holder, key, value);
-			}({ "": result }, ""))
+			}(
+				{
+					"": result
+				}, ""))
 			: result;
 	};
 }());
 
 /*!
-  * Reqwest! A general purpose XHR connection manager
-  * (c) Dustin Diaz 2011
-  * https://github.com/ded/reqwest
-  * license MIT
-  */
-!function(a, b) { typeof module != "undefined" ? module.exports = b() : typeof define == "function" && define.amd ? define(a, b) : this[a] = b() }("reqwest", function() {
-	function handleReadyState(a, b, c) { return function() { a && a[readyState] == 4 && (twoHundo.test(a.status) ? b(a) : c(a)) } }
+ * Reqwest! A general purpose XHR connection manager
+ * (c) Dustin Diaz 2011
+ * https://github.com/ded/reqwest
+ * license MIT
+ */
+! function(a, b) {
+	typeof module != "undefined" ? module.exports = b() : typeof define == "function" && define.amd ? define(a, b) : this[a] = b();
+}("reqwest", function() {
+	function handleReadyState(a, b, c) {
+		return function() {
+			a && a[readyState] == 4 && (twoHundo.test(a.status) ? b(a) : c(a));
+		};
+	}
 
 	function setHeaders(a, b) {
-		var c = b.headers || {}, d;
+		var c = b.headers ||
+			    {},
+			d;
 		c.Accept =
 			c.Accept || defaultHeaders.accept[b.type] || defaultHeaders.accept["*"], !b.crossOrigin && !c[requestedWith] && (c[requestedWith] = defaultHeaders.requestedWith), c[contentType] || (c[contentType] = b.contentType || defaultHeaders.contentType);
 		for (d in c) c.hasOwnProperty(d) && a.setRequestHeader(d, c[d]);
 	}
 
-	function generalCallback(a) { lastValue = a }
+	function generalCallback(a) {
+		lastValue = a;
+	}
 
-	function urlappend(a, b) { return a + (/\?/.test(a) ? "&" : "?") + b }
+	function urlappend(a, b) {
+		return a + (/\?/.test(a) ? "&" : "?") + b;
+	}
 
 	function handleJsonp(a, b, c, d) {
-		var e = uniqid++, f = a.jsonpCallback || "callback", g = a.jsonpCallbackName || "reqwest_" + e, h = new RegExp("((^|\\?|&)" + f + ")=([^&]+)"), i = d.match(h), j = doc.createElement("script"), k = 0;
+		var e = uniqid++,
+			f = a.jsonpCallback || "callback",
+			g = a.jsonpCallbackName || "reqwest_" + e,
+			h = new RegExp("((^|\\?|&)" + f + ")=([^&]+)"),
+			i = d.match(h),
+			j = doc.createElement("script"),
+			k = 0;
 		i ? i[3] === "?" ? d = d.replace(h, "$1=" + g) : g = i[3] : d = urlappend(d, f + "=" + g), win[g] = generalCallback, j.type = "text/javascript", j.src = d, j.async =
 			!0, typeof j.onreadystatechange != "undefined" && (j.event = "onclick", j.htmlFor = j.id = "_reqwest_" + e), j.onload = j.onreadystatechange = function() {
-			if (j[readyState] && j[readyState] !== "complete" && j[readyState] !== "loaded" || k) return!1;
+			if (j[readyState] && j[readyState] !== "complete" && j[readyState] !== "loaded" || k) return !1;
 			j.onload = j.onreadystatechange = null, j.onclick && j.onclick(), a.success && a.success(lastValue), lastValue = undefined, head.removeChild(j), k = 1;
 		}, head.appendChild(j);
 	}
 
 	function getRequest(a, b, c) {
-		var d = (a.method || "GET").toUpperCase(), e = typeof a == "string" ? a : a.url, f = a.processData !== !1 && a.data && typeof a.data != "string" ? reqwest.toQueryString(a.data) : a.data || null, g;
-		return(a.type == "jsonp" || d == "GET") && f && (e = urlappend(e, f), f = null), a.type == "jsonp"
+		var d = (a.method || "GET")
+			    .toUpperCase(),
+			e = typeof a == "string" ? a : a.url,
+			f = a.processData !== !1 && a.data && typeof a.data != "string" ? reqwest.toQueryString(a.data) : a.data || null,
+			g;
+		return (a.type == "jsonp" || d == "GET") && f && (e = urlappend(e, f), f = null), a.type == "jsonp"
 			? handleJsonp(a, b, c, e)
 			: (g = xhr(), g.open(d, e, !0), setHeaders(g, a), g.onreadystatechange = handleReadyState(g, b, c), a.before && a.before(g), g.send(f), g);
 	}
 
-	function Reqwest(a, b) { this.o = a, this.fn = b, init.apply(this, arguments) }
+	function Reqwest(a, b) {
+		this.o = a, this.fn = b, init.apply(this, arguments);
+	}
 
 	function setType(a) {
 		var b = a.match(/\.(json|jsonp|html|xml)(\?|$)/);
@@ -1195,55 +1397,73 @@ var json_parse = (function() {
 	}
 
 	function init(o, fn) {
-		function complete(a) { o.timeout && clearTimeout(self.timeout), self.timeout = null, o.complete && o.complete(a) }
+		function complete(a) {
+			o.timeout && clearTimeout(self.timeout), self.timeout = null, o.complete && o.complete(a);
+		}
 
 		function success(resp) {
 			var r = resp.responseText;
 			if (r)
 				switch (type) {
-				case"json":
+				case "json":
 					try {
 						resp = win.JSON ? win.JSON.parse(r) : eval("(" + r + ")");
 					} catch (err) {
 						return error(resp, "Could not parse JSON in response", err);
 					}
 					break;
-				case"js":
+				case "js":
 					resp = eval(r);
 					break;
-				case"html":
+				case "html":
 					resp = r;
 				}
 			fn(resp), o.success && o.success(resp), complete(resp);
 		}
 
-		function error(a, b, c) { o.error && o.error(a, b, c), complete(a) }
+		function error(a, b, c) {
+			o.error && o.error(a, b, c), complete(a);
+		}
 
 		this.url = typeof o == "string" ? o : o.url, this.timeout = null;
-		var type = o.type || setType(this.url), self = this;
-		fn = fn || function() {}, o.timeout && (this.timeout = setTimeout(function() { self.abort() }, o.timeout)), this.request = getRequest(o, success, error);
+		var type = o.type || setType(this.url),
+			self = this;
+		fn = fn || function() {}, o.timeout && (this.timeout = setTimeout(function() {
+			self.abort();
+		}, o.timeout)), this.request = getRequest(o, success, error);
 	}
 
-	function reqwest(a, b) { return new Reqwest(a, b) }
+	function reqwest(a, b) {
+		return new Reqwest(a, b);
+	}
 
-	function normalize(a) { return a ? a.replace(/\r?\n/g, "\r\n") : "" }
+	function normalize(a) {
+		return a ? a.replace(/\r?\n/g, "\r\n") : "";
+	}
 
 	function serial(a, b) {
-		var c = a.name, d = a.tagName.toLowerCase(), e = function(a) { a && !a.disabled && b(c, normalize(a.attributes.value && a.attributes.value.specified ? a.value : a.text)) };
+		var c = a.name,
+			d = a.tagName.toLowerCase(),
+			e = function(a) {
+				a && !a.disabled && b(c, normalize(a.attributes.value && a.attributes.value.specified ? a.value : a.text));
+			};
 		if (a.disabled || !c) return;
 		switch (d) {
-		case"input":
+		case "input":
 			if (!/reset|button|image|file/i.test(a.type)) {
-				var f = /checkbox/i.test(a.type), g = /radio/i.test(a.type), h = a.value;
+				var f = /checkbox/i.test(a.type),
+					g = /radio/i.test(a.type),
+					h = a.value;
 				(!f && !g || a.checked) && b(c, normalize(f && h === "" ? "on" : h));
 			}
 			break;
-		case"textarea":
+		case "textarea":
 			b(c, normalize(a.value));
 			break;
-		case"select":
+		case "select":
 			if (a.type.toLowerCase() === "select-one") e(a.selectedIndex >= 0 ? a.options[a.selectedIndex] : null);
-			else for (var i = 0; a.length && i < a.length; i++) a.options[i].selected && e(a.options[i]);
+			else
+				for (var i = 0; a.length && i < a.length; i++) a.options[i].selected && e(a.options[i]);
 		}
 	}
 
@@ -1261,11 +1481,15 @@ var json_parse = (function() {
 		for (c = 0; c < arguments.length; c++) b = arguments[c], /input|select|textarea/i.test(b.tagName) && serial(b, a), e(b, ["input", "select", "textarea"]);
 	}
 
-	function serializeQueryString() { return reqwest.toQueryString(reqwest.serializeArray.apply(null, arguments)) }
+	function serializeQueryString() {
+		return reqwest.toQueryString(reqwest.serializeArray.apply(null, arguments));
+	}
 
 	function serializeHash() {
 		var a = {};
-		return eachFormElement.apply(function(b, c) { b in a ? (a[b] && !isArray(a[b]) && (a[b] = [a[b]]), a[b].push(c)) : a[b] = c }, arguments), a;
+		return eachFormElement.apply(function(b, c) {
+			b in a ? (a[b] && !isArray(a[b]) && (a[b] = [a[b]]), a[b].push(c)) : a[b] = c;
+		}, arguments), a;
 	}
 
 	var context = this,
@@ -1281,32 +1505,70 @@ var json_parse = (function() {
 		uniqid = 0,
 		lastValue,
 		xmlHttpRequest = "XMLHttpRequest",
-		isArray = typeof Array.isArray == "function" ? Array.isArray : function(a) { return a instanceof Array },
-		defaultHeaders =
-		{
+		isArray = typeof Array.isArray == "function"
+			? Array.isArray
+			: function(a) {
+				return a instanceof Array;
+			},
+		defaultHeaders = {
 			contentType: "application/x-www-form-urlencoded",
-			accept: { "*": "text/javascript, text/html, application/xml, text/xml, */*", xml: "application/xml, text/xml", html: "text/html", text: "text/plain", json: "application/json, text/javascript", js: "application/javascript, text/javascript" },
+			accept:
+			{
+				"*": "text/javascript, text/html, application/xml, text/xml, */*",
+				xml: "application/xml, text/xml",
+				html: "text/html",
+				text: "text/plain",
+				json: "application/json, text/javascript",
+				js: "application/javascript, text/javascript"
+			},
 			requestedWith: xmlHttpRequest
 		},
-		xhr = win[xmlHttpRequest] ? function() { return new XMLHttpRequest } : function() { return new ActiveXObject("Microsoft.XMLHTTP") };
-	return Reqwest.prototype = { abort: function() { this.request.abort() }, retry: function() { init.call(this, this.o, this.fn) } }, reqwest.serializeArray = function() {
+		xhr = win[xmlHttpRequest]
+			? function() {
+				return new XMLHttpRequest;
+			}
+			: function() {
+				return new ActiveXObject("Microsoft.XMLHTTP");
+			};
+	return Reqwest.prototype = {
+		abort: function() {
+			this.request.abort();
+		},
+		retry: function() {
+			init.call(this, this.o, this.fn);
+		}
+	}, reqwest.serializeArray = function() {
 		var a = [];
-		return eachFormElement.apply(function(b, c) { a.push({ name: b, value: c }) }, arguments), a;
+		return eachFormElement.apply(function(b, c) {
+			a.push(
+				{
+					name: b,
+					value: c
+				});
+		}, arguments), a;
 	}, reqwest.serialize = function() {
-		if (arguments.length === 0) return"";
+		if (arguments.length === 0) return "";
 		var a, b, c = Array.prototype.slice.call(arguments, 0);
 		return a = c.pop(), a && a.nodeType && c.push(a) && (a = null), a && (a = a.type), a == "map" ? b = serializeHash : a == "array" ? b = reqwest.serializeArray : b = serializeQueryString, b.apply(null, c);
 	}, reqwest.toQueryString = function(a) {
-		var b = "", c, d = encodeURIComponent, e = function(a, c) { b += d(a) + "=" + d(c) + "&" };
-		if (isArray(a)) for (c = 0; a && c < a.length; c++) e(a[c].name, a[c].value);
+		var b = "",
+			c,
+			d = encodeURIComponent,
+			e = function(a, c) {
+				b += d(a) + "=" + d(c) + "&";
+			};
+		if (isArray(a))
+			for (c = 0; a && c < a.length; c++) e(a[c].name, a[c].value);
 		else
 			for (var f in a) {
 				if (!Object.hasOwnProperty.call(a, f)) continue;
 				var g = a[f];
-				if (isArray(g)) for (c = 0; c < g.length; c++) e(f, g[c]);
+				if (isArray(g))
+					for (c = 0; c < g.length; c++) e(f, g[c]);
 				else e(f, a[f]);
 			}
-		return b.replace(/&$/, "").replace(/%20/g, "+");
+		return b.replace(/&$/, "")
+			.replace(/%20/g, "+");
 	}, reqwest.compat = function(a, b) {
 		return a && (a.type && (a.method = a.type) && delete a.type, a.dataType && (a.type = a.dataType), a.jsonpCallback && (a.jsonpCallbackName = a.jsonpCallback) && delete a.jsonpCallback, a.jsonp && (a.jsonpCallback = a.jsonp)), new Reqwest(a, b);
 	}, reqwest;
