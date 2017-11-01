@@ -77,7 +77,7 @@ if (typeof(google.maps.CartoDBLayer) === "undefined") {
 			if (this.options.debug) {
 				throw('cartodb-gmapsv3 needs at least a CartoDB table name and the gmapsv3 map object :(');
 			} else {
-				return
+				return;
 			}
 		}
 
@@ -151,7 +151,7 @@ if (typeof(google.maps.CartoDBLayer) === "undefined") {
 			if (this.options.debug) {
 				throw('the layer is not still added to the map');
 			} else {
-				return
+				return;
 			}
 		}
 
@@ -159,7 +159,7 @@ if (typeof(google.maps.CartoDBLayer) === "undefined") {
 			if (this.options.debug) {
 				throw(opacity + ' is not a valid value');
 			} else {
-				return
+				return;
 			}
 		}
 
@@ -180,7 +180,7 @@ if (typeof(google.maps.CartoDBLayer) === "undefined") {
 			if (this.options.debug) {
 				throw('the layer is not still added to the map');
 			} else {
-				return
+				return;
 			}
 		}
 
@@ -188,7 +188,7 @@ if (typeof(google.maps.CartoDBLayer) === "undefined") {
 			if (this.options.debug) {
 				throw(sql + ' is not a valid query');
 			} else {
-				return
+				return;
 			}
 		}
 
@@ -211,7 +211,7 @@ if (typeof(google.maps.CartoDBLayer) === "undefined") {
 			if (this.options.debug) {
 				throw('the layer is not still added to the map');
 			} else {
-				return
+				return;
 			}
 		}
 
@@ -219,7 +219,7 @@ if (typeof(google.maps.CartoDBLayer) === "undefined") {
 			if (this.options.debug) {
 				throw(style + ' is not a valid style');
 			} else {
-				return
+				return;
 			}
 		}
 
@@ -239,7 +239,7 @@ if (typeof(google.maps.CartoDBLayer) === "undefined") {
 			if (this.options.debug) {
 				throw('the layer is not still added to the map');
 			} else {
-				return
+				return;
 			}
 		}
 
@@ -247,7 +247,7 @@ if (typeof(google.maps.CartoDBLayer) === "undefined") {
 			if (this.options.debug) {
 				throw(value + ' is not a valid setInteractivity value');
 			} else {
-				return
+				return;
 			}
 		}
 
@@ -268,7 +268,7 @@ if (typeof(google.maps.CartoDBLayer) === "undefined") {
 			if (this.options.debug) {
 				throw('the layer is not still added to the map');
 			} else {
-				return
+				return;
 			}
 		}
 
@@ -276,7 +276,7 @@ if (typeof(google.maps.CartoDBLayer) === "undefined") {
 			if (this.options.debug) {
 				throw(position + ' is not a valid layer position');
 			} else {
-				return
+				return;
 			}
 		}
 
@@ -300,7 +300,7 @@ if (typeof(google.maps.CartoDBLayer) === "undefined") {
 			if (this.options.debug) {
 				throw('the layer is not still added to the map');
 			} else {
-				return
+				return;
 			}
 		}
 
@@ -308,7 +308,7 @@ if (typeof(google.maps.CartoDBLayer) === "undefined") {
 			if (this.options.debug) {
 				throw(bool + ' is not a valid setInteraction value');
 			} else {
-				return
+				return;
 			}
 		}
 
@@ -334,7 +334,7 @@ if (typeof(google.maps.CartoDBLayer) === "undefined") {
 			if (this.options.debug) {
 				throw('the layer is not still added to the map');
 			} else {
-				return
+				return;
 			}
 		}
 
@@ -342,7 +342,7 @@ if (typeof(google.maps.CartoDBLayer) === "undefined") {
 			if (this.options.debug) {
 				throw(options + ' options has to be an object');
 			} else {
-				return
+				return;
 			}
 		}
 
@@ -362,7 +362,7 @@ if (typeof(google.maps.CartoDBLayer) === "undefined") {
 			if (this.options.debug) {
 				throw('the layer is not still added to the map');
 			} else {
-				return
+				return;
 			}
 		}
 
@@ -370,7 +370,7 @@ if (typeof(google.maps.CartoDBLayer) === "undefined") {
 			if (this.options.debug) {
 				throw('the layer is already hidden');
 			} else {
-				return
+				return;
 			}
 		}
 
@@ -394,7 +394,7 @@ if (typeof(google.maps.CartoDBLayer) === "undefined") {
 			if (this.options.debug) {
 				throw('the layer is not still added to the map');
 			} else {
-				return
+				return;
 			}
 		}
 
@@ -402,7 +402,7 @@ if (typeof(google.maps.CartoDBLayer) === "undefined") {
 			if (this.options.debug) {
 				throw('the layer is already shown');
 			} else {
-				return
+				return;
 			}
 		}
 
@@ -949,26 +949,26 @@ var json_parse = (function() {
 		error = function(m) { throw { name: "SyntaxError", message: m, at: at, text: text } },
 		next = function(c) {
 			if (c && c !== ch) {
-				error("Expected '" + c + "' instead of '" + ch + "'")
+				error("Expected '" + c + "' instead of '" + ch + "'");
 			}
 			ch = text.charAt(at);
 			at += 1;
-			return ch
+			return ch;
 		},
 		number = function() {
 			var number, string = "";
 			if (ch === "-") {
 				string = "-";
-				next("-")
+				next("-");
 			}
 			while (ch >= "0" && ch <= "9") {
 				string += ch;
-				next()
+				next();
 			}
 			if (ch === ".") {
 				string += ".";
 				while (next() && ch >= "0" && ch <= "9") {
-					string += ch
+					string += ch;
 				}
 			}
 			if (ch === "e" || ch === "E") {
@@ -976,18 +976,18 @@ var json_parse = (function() {
 				next();
 				if (ch === "-" || ch === "+") {
 					string += ch;
-					next()
+					next();
 				}
 				while (ch >= "0" && ch <= "9") {
 					string += ch;
-					next()
+					next();
 				}
 			}
 			number = +string;
 			if (!isFinite(number)) {
-				error("Bad number")
+				error("Bad number");
 			} else {
-				return number
+				return number;
 			}
 		},
 		string = function() {
@@ -996,7 +996,7 @@ var json_parse = (function() {
 				while (next()) {
 					if (ch === '"') {
 						next();
-						return string
+						return string;
 					} else {
 						if (ch === "\\") {
 							next();
@@ -1005,29 +1005,29 @@ var json_parse = (function() {
 								for (i = 0; i < 4; i += 1) {
 									hex = parseInt(next(), 16);
 									if (!isFinite(hex)) {
-										break
+										break;
 									}
-									uffff = uffff * 16 + hex
+									uffff = uffff * 16 + hex;
 								}
-								string += String.fromCharCode(uffff)
+								string += String.fromCharCode(uffff);
 							} else {
 								if (typeof escapee[ch] === "string") {
-									string += escapee[ch]
+									string += escapee[ch];
 								} else {
-									break
+									break;
 								}
 							}
 						} else {
-							string += ch
+							string += ch;
 						}
 					}
 				}
 			}
-			error("Bad string")
+			error("Bad string");
 		},
 		white = function() {
 			while (ch && ch <= " ") {
-				next()
+				next();
 			}
 		},
 		word = function() {
@@ -1050,9 +1050,9 @@ var json_parse = (function() {
 				next("u");
 				next("l");
 				next("l");
-				return null
+				return null;
 			}
-			error("Unexpected '" + ch + "'")
+			error("Unexpected '" + ch + "'");
 		},
 		value,
 		array = function() {
@@ -1062,20 +1062,20 @@ var json_parse = (function() {
 				white();
 				if (ch === "]") {
 					next("]");
-					return array
+					return array;
 				}
 				while (ch) {
 					array.push(value());
 					white();
 					if (ch === "]") {
 						next("]");
-						return array
+						return array;
 					}
 					next(",");
-					white()
+					white();
 				}
 			}
-			error("Bad array")
+			error("Bad array");
 		},
 		object = function() {
 			var key, object = {};
@@ -1084,26 +1084,26 @@ var json_parse = (function() {
 				white();
 				if (ch === "}") {
 					next("}");
-					return object
+					return object;
 				}
 				while (ch) {
 					key = string();
 					white();
 					next(":");
 					if (Object.hasOwnProperty.call(object, key)) {
-						error('Duplicate key "' + key + '"')
+						error('Duplicate key "' + key + '"');
 					}
 					object[key] = value();
 					white();
 					if (ch === "}") {
 						next("}");
-						return object
+						return object;
 					}
 					next(",");
-					white()
+					white();
 				}
 			}
-			error("Bad object")
+			error("Bad object");
 		};
 	value = function() {
 		white();
@@ -1117,7 +1117,7 @@ var json_parse = (function() {
 		case"-":
 			return number();
 		default:
-			return ch >= "0" && ch <= "9" ? number() : word()
+			return ch >= "0" && ch <= "9" ? number() : word();
 		}
 	};
 	return function(source, reviver) {
@@ -1128,7 +1128,7 @@ var json_parse = (function() {
 		result = value();
 		white();
 		if (ch) {
-			error("Syntax error")
+			error("Syntax error");
 		}
 		return typeof reviver === "function"
 			? (function walk(holder, key) {
@@ -1138,17 +1138,17 @@ var json_parse = (function() {
 						if (Object.prototype.hasOwnProperty.call(value, k)) {
 							v = walk(value, k);
 							if (v !== undefined) {
-								value[k] = v
+								value[k] = v;
 							} else {
-								delete value[k]
+								delete value[k];
 							}
 						}
 					}
 				}
-				return reviver.call(holder, key, value)
+				return reviver.call(holder, key, value);
 			}({ "": result }, ""))
-			: result
-	}
+			: result;
+	};
 }());
 
 /*!
@@ -1164,7 +1164,7 @@ var json_parse = (function() {
 		var c = b.headers || {}, d;
 		c.Accept =
 			c.Accept || defaultHeaders.accept[b.type] || defaultHeaders.accept["*"], !b.crossOrigin && !c[requestedWith] && (c[requestedWith] = defaultHeaders.requestedWith), c[contentType] || (c[contentType] = b.contentType || defaultHeaders.contentType);
-		for (d in c) c.hasOwnProperty(d) && a.setRequestHeader(d, c[d])
+		for (d in c) c.hasOwnProperty(d) && a.setRequestHeader(d, c[d]);
 	}
 
 	function generalCallback(a) { lastValue = a }
@@ -1176,22 +1176,22 @@ var json_parse = (function() {
 		i ? i[3] === "?" ? d = d.replace(h, "$1=" + g) : g = i[3] : d = urlappend(d, f + "=" + g), win[g] = generalCallback, j.type = "text/javascript", j.src = d, j.async =
 			!0, typeof j.onreadystatechange != "undefined" && (j.event = "onclick", j.htmlFor = j.id = "_reqwest_" + e), j.onload = j.onreadystatechange = function() {
 			if (j[readyState] && j[readyState] !== "complete" && j[readyState] !== "loaded" || k) return!1;
-			j.onload = j.onreadystatechange = null, j.onclick && j.onclick(), a.success && a.success(lastValue), lastValue = undefined, head.removeChild(j), k = 1
-		}, head.appendChild(j)
+			j.onload = j.onreadystatechange = null, j.onclick && j.onclick(), a.success && a.success(lastValue), lastValue = undefined, head.removeChild(j), k = 1;
+		}, head.appendChild(j);
 	}
 
 	function getRequest(a, b, c) {
 		var d = (a.method || "GET").toUpperCase(), e = typeof a == "string" ? a : a.url, f = a.processData !== !1 && a.data && typeof a.data != "string" ? reqwest.toQueryString(a.data) : a.data || null, g;
 		return(a.type == "jsonp" || d == "GET") && f && (e = urlappend(e, f), f = null), a.type == "jsonp"
 			? handleJsonp(a, b, c, e)
-			: (g = xhr(), g.open(d, e, !0), setHeaders(g, a), g.onreadystatechange = handleReadyState(g, b, c), a.before && a.before(g), g.send(f), g)
+			: (g = xhr(), g.open(d, e, !0), setHeaders(g, a), g.onreadystatechange = handleReadyState(g, b, c), a.before && a.before(g), g.send(f), g);
 	}
 
 	function Reqwest(a, b) { this.o = a, this.fn = b, init.apply(this, arguments) }
 
 	function setType(a) {
 		var b = a.match(/\.(json|jsonp|html|xml)(\?|$)/);
-		return b ? b[1] : "js"
+		return b ? b[1] : "js";
 	}
 
 	function init(o, fn) {
@@ -1203,25 +1203,25 @@ var json_parse = (function() {
 				switch (type) {
 				case"json":
 					try {
-						resp = win.JSON ? win.JSON.parse(r) : eval("(" + r + ")")
+						resp = win.JSON ? win.JSON.parse(r) : eval("(" + r + ")");
 					} catch (err) {
-						return error(resp, "Could not parse JSON in response", err)
+						return error(resp, "Could not parse JSON in response", err);
 					}
 					break;
 				case"js":
 					resp = eval(r);
 					break;
 				case"html":
-					resp = r
+					resp = r;
 				}
-			fn(resp), o.success && o.success(resp), complete(resp)
+			fn(resp), o.success && o.success(resp), complete(resp);
 		}
 
 		function error(a, b, c) { o.error && o.error(a, b, c), complete(a) }
 
 		this.url = typeof o == "string" ? o : o.url, this.timeout = null;
 		var type = o.type || setType(this.url), self = this;
-		fn = fn || function() {}, o.timeout && (this.timeout = setTimeout(function() { self.abort() }, o.timeout)), this.request = getRequest(o, success, error)
+		fn = fn || function() {}, o.timeout && (this.timeout = setTimeout(function() { self.abort() }, o.timeout)), this.request = getRequest(o, success, error);
 	}
 
 	function reqwest(a, b) { return new Reqwest(a, b) }
@@ -1235,7 +1235,7 @@ var json_parse = (function() {
 		case"input":
 			if (!/reset|button|image|file/i.test(a.type)) {
 				var f = /checkbox/i.test(a.type), g = /radio/i.test(a.type), h = a.value;
-				(!f && !g || a.checked) && b(c, normalize(f && h === "" ? "on" : h))
+				(!f && !g || a.checked) && b(c, normalize(f && h === "" ? "on" : h));
 			}
 			break;
 		case"textarea":
@@ -1243,7 +1243,7 @@ var json_parse = (function() {
 			break;
 		case"select":
 			if (a.type.toLowerCase() === "select-one") e(a.selectedIndex >= 0 ? a.options[a.selectedIndex] : null);
-			else for (var i = 0; a.length && i < a.length; i++) a.options[i].selected && e(a.options[i])
+			else for (var i = 0; a.length && i < a.length; i++) a.options[i].selected && e(a.options[i]);
 		}
 	}
 
@@ -1255,17 +1255,17 @@ var json_parse = (function() {
 			e = function(b, c) {
 				for (var e = 0; e < c.length; e++) {
 					var f = b[byTag](c[e]);
-					for (d = 0; d < f.length; d++) serial(f[d], a)
+					for (d = 0; d < f.length; d++) serial(f[d], a);
 				}
 			};
-		for (c = 0; c < arguments.length; c++) b = arguments[c], /input|select|textarea/i.test(b.tagName) && serial(b, a), e(b, ["input", "select", "textarea"])
+		for (c = 0; c < arguments.length; c++) b = arguments[c], /input|select|textarea/i.test(b.tagName) && serial(b, a), e(b, ["input", "select", "textarea"]);
 	}
 
 	function serializeQueryString() { return reqwest.toQueryString(reqwest.serializeArray.apply(null, arguments)) }
 
 	function serializeHash() {
 		var a = {};
-		return eachFormElement.apply(function(b, c) { b in a ? (a[b] && !isArray(a[b]) && (a[b] = [a[b]]), a[b].push(c)) : a[b] = c }, arguments), a
+		return eachFormElement.apply(function(b, c) { b in a ? (a[b] && !isArray(a[b]) && (a[b] = [a[b]]), a[b].push(c)) : a[b] = c }, arguments), a;
 	}
 
 	var context = this,
@@ -1291,11 +1291,11 @@ var json_parse = (function() {
 		xhr = win[xmlHttpRequest] ? function() { return new XMLHttpRequest } : function() { return new ActiveXObject("Microsoft.XMLHTTP") };
 	return Reqwest.prototype = { abort: function() { this.request.abort() }, retry: function() { init.call(this, this.o, this.fn) } }, reqwest.serializeArray = function() {
 		var a = [];
-		return eachFormElement.apply(function(b, c) { a.push({ name: b, value: c }) }, arguments), a
+		return eachFormElement.apply(function(b, c) { a.push({ name: b, value: c }) }, arguments), a;
 	}, reqwest.serialize = function() {
 		if (arguments.length === 0) return"";
 		var a, b, c = Array.prototype.slice.call(arguments, 0);
-		return a = c.pop(), a && a.nodeType && c.push(a) && (a = null), a && (a = a.type), a == "map" ? b = serializeHash : a == "array" ? b = reqwest.serializeArray : b = serializeQueryString, b.apply(null, c)
+		return a = c.pop(), a && a.nodeType && c.push(a) && (a = null), a && (a = a.type), a == "map" ? b = serializeHash : a == "array" ? b = reqwest.serializeArray : b = serializeQueryString, b.apply(null, c);
 	}, reqwest.toQueryString = function(a) {
 		var b = "", c, d = encodeURIComponent, e = function(a, c) { b += d(a) + "=" + d(c) + "&" };
 		if (isArray(a)) for (c = 0; a && c < a.length; c++) e(a[c].name, a[c].value);
@@ -1304,10 +1304,10 @@ var json_parse = (function() {
 				if (!Object.hasOwnProperty.call(a, f)) continue;
 				var g = a[f];
 				if (isArray(g)) for (c = 0; c < g.length; c++) e(f, g[c]);
-				else e(f, a[f])
+				else e(f, a[f]);
 			}
-		return b.replace(/&$/, "").replace(/%20/g, "+")
+		return b.replace(/&$/, "").replace(/%20/g, "+");
 	}, reqwest.compat = function(a, b) {
-		return a && (a.type && (a.method = a.type) && delete a.type, a.dataType && (a.type = a.dataType), a.jsonpCallback && (a.jsonpCallbackName = a.jsonpCallback) && delete a.jsonpCallback, a.jsonp && (a.jsonpCallback = a.jsonp)), new Reqwest(a, b)
-	}, reqwest
+		return a && (a.type && (a.method = a.type) && delete a.type, a.dataType && (a.type = a.dataType), a.jsonpCallback && (a.jsonpCallbackName = a.jsonpCallback) && delete a.jsonpCallback, a.jsonp && (a.jsonpCallback = a.jsonp)), new Reqwest(a, b);
+	}, reqwest;
 });

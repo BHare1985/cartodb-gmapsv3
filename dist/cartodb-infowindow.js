@@ -210,15 +210,15 @@ CartoDBInfowindow.prototype.getElementsByClassName = function(classname, node) {
 		if (e && typeof c.easing != "function") return y(a, b, c);
 		var d = q(b, function(a, b) {
 			a = r(a);
-			return p(a) in h && g.test(b) ? [a, b + "px"] : [a, b]
+			return p(a) in h && g.test(b) ? [a, b + "px"] : [a, b];
 		});
-		x(a, d, c)
+		x(a, d, c);
 	}
 
 	function z(a) {
 		var b = {};
 		for (var c in a) b[c] = a[c], c == "after" && delete a[c];
-		return b
+		return b;
 	}
 
 	function y(a, b, c) {
@@ -228,10 +228,10 @@ CartoDBInfowindow.prototype.getElementsByClassName = function(classname, node) {
 			for (c in b) b.hasOwnProperty(c) && d.push(r(c) + " " + i + " " + j);
 			for (c in b) {
 				var f = p(c) in h && g.test(b[c]) ? b[c] + "px" : b[c];
-				b.hasOwnProperty(c) && (a.style[p(c)] = f)
+				b.hasOwnProperty(c) && (a.style[p(c)] = f);
 			}
-			k = a.getAttribute("style"), d = d.join(","), a.style[e + "Transition"] = d
-		}, 10)
+			k = a.getAttribute("style"), d = d.join(","), a.style[e + "Transition"] = d;
+		}, 10);
 	}
 
 	function x(a, b, c, d) {
@@ -241,20 +241,20 @@ CartoDBInfowindow.prototype.getElementsByClassName = function(classname, node) {
 		l = setInterval(function() {
 			var b = +(new Date), f, i = b > k ? 1 : (b - h) / j;
 			for (f in e) a.style[f] = e[f].f(g[f].v, e[f].v, m(i)) + e[f].u;
-			b > k && (clearInterval(l), c.after && c.after(), d && setTimeout(d, 1))
-		}, 10)
+			b > k && (clearInterval(l), c.after && c.after(), d && setTimeout(d, 1));
+		}, 10);
 	}
 
 	function w(a) {
 		var c, d = {}, e = k.length, f;
 		b.innerHTML = '<div style="' + a + '"></div>', c = b.childNodes[0].style;
 		while (e--) (f = c[k[e]]) && (d[k[e]] = v(f));
-		return d
+		return d;
 	}
 
 	function v(a) {
 		var b = parseFloat(a), c = a ? a.replace(/^[\-\d\.]+/, "") : a;
-		return isNaN(b) ? { v: c, f: u, u: "" } : { v: b, f: s, u: c }
+		return isNaN(b) ? { v: c, f: u, u: "" } : { v: b, f: s, u: c };
 	}
 
 	function u(a, b, c) {
@@ -262,13 +262,13 @@ CartoDBInfowindow.prototype.getElementsByClassName = function(classname, node) {
 		while ((e = 3) && (f = arguments[d - 1]) && d--)
 			if (t(f, 0) == "r") {
 				f = f.match(/\d+/g);
-				while (e--) h.push(~~f[e])
+				while (e--) h.push(~~f[e]);
 			} else {
 				f.length == 4 && (f = "#" + t(f, 1) + t(f, 1) + t(f, 2) + t(f, 2) + t(f, 3) + t(f, 3));
-				while (e--) h.push(parseInt(t(f, 1 + e * 2, 2), 16))
+				while (e--) h.push(parseInt(t(f, 1 + e * 2, 2), 16));
 			}
 		while (e--) g = ~~(h[e + 3] + (h[e] - h[e + 3]) * c), i.push(g < 0 ? 0 : g > 255 ? 255 : g);
-		return"rgb(" + i.join(",") + ")"
+		return"rgb(" + i.join(",") + ")";
 	}
 
 	function t(a, b, c) { return a.substr(b, c || 1) }
@@ -277,14 +277,14 @@ CartoDBInfowindow.prototype.getElementsByClassName = function(classname, node) {
 
 	function r(a) {
 		if (a.toUpperCase() === a) return a;
-		return a.replace(/([a-zA-Z0-9])([A-Z])/g, function(a, b, c) { return b + "-" + c }).toLowerCase()
+		return a.replace(/([a-zA-Z0-9])([A-Z])/g, function(a, b, c) { return b + "-" + c }).toLowerCase();
 	}
 
 	function q(a, b) {
 		return o(a, function(a, c) {
 			var d = b ? b(c, a) : [c, a];
-			return d[0] + ":" + d[1] + ";"
-		}).join("")
+			return d[0] + ":" + d[1] + ";";
+		}).join("");
 	}
 
 	function p(a) { return a.replace(/-(.)/g, function(a, b) { return b.toUpperCase() }) }
@@ -292,7 +292,7 @@ CartoDBInfowindow.prototype.getElementsByClassName = function(classname, node) {
 	function o(a, b, c) {
 		var d = [], e;
 		for (e in a) d.push(b.call(c, a[e], e, a));
-		return d
+		return d;
 	}
 
 	var b = document.createElement("div"),
@@ -312,6 +312,6 @@ CartoDBInfowindow.prototype.getElementsByClassName = function(classname, node) {
 	var B = a.emile;
 	A.noConflict = function() {
 		a.emile = B;
-		return this
-	}, a.emile = A
+		return this;
+	}, a.emile = A;
 }(this);
